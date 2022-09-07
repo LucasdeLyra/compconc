@@ -10,9 +10,9 @@
 
 #define NTHREADS  2 //total de threads a serem criadas
 #define SIZEARRAY 10000 //tamanho da array
-double randomlist[SIZEARRAY]; //array com numeros aleatorios
 
 
+//imprime uma array de doubles
 void imprime(double *array, int tamanhoArray) {
   int i;
   for (i=0; i < tamanhoArray; i++) {
@@ -20,6 +20,8 @@ void imprime(double *array, int tamanhoArray) {
   }
 }
 
+
+// preenche um array com números randômicos
 void fillArray (double *array, int tamanhoArray){
   int i;
   for(i=0; i < tamanhoArray; i++){
@@ -27,18 +29,29 @@ void fillArray (double *array, int tamanhoArray){
   }
 }
 
+
 //cria a estrutura de dados para armazenar os argumentos da thread
 typedef struct {
     int idThread, nThreads;
+    double *rlist;
 } t_Args;
 
+
+//função sequencial
+void MultiplyTenPercent (double *array){
+    for (int i=0; i<SIZEARRAY; i++){
+        array[i] = array[i]*1.1;
+    }
+}
+
+
 //funcao executada pelas threads
-void *MultiplyTenPercent (void *arg) {
+void *MultiplyTenPercentThreads (void *arg) {
     t_Args *args = (t_Args *) arg;
     int i;
     printf("Sou a thread %d de %d threads\n", args->idThread, args->nThreads);
     for (i=SIZEARRAY*args->idThread; i<SIZEARRAY/NTHREADS; i++){
-        randomlist[i] = 1.1 * randomlist[i];
+        args->rlist[i] = 1.1 * args->rlist[i];
     }
     free(arg); //aqui pode liberar a alocacao feita na main
 
@@ -46,10 +59,23 @@ void *MultiplyTenPercent (void *arg) {
 }
 
 
+// testa se dois doubles são iguais, vendo se a diferença entre eles está entre -10^-6 e 10^-6 
+int isCorrect(double *arrayThreads, double *array){
+    for (int i = 0; i<SIZEARRAY; i++){
+        if (array[0]-arrayThreads[0]>0.000001 && array[0]-arrayThreads[0]<-0.000001){
+            printf("Errado no item %d\n", i);
+            return 0;
+        }
+    }
+    printf("Passou em tudo! Yey :3\n");
+    return 1;
+}
+
 
 //funcao principal do programa
 int main() {
     pthread_t tid_sistema[NTHREADS]; //identificadores das threads no sistema
+    double randomlist[SIZEARRAY], copyarray[SIZEARRAY]; //array com numeros aleatorios
     int thread; //variavel auxiliar
 
     t_Args *arg; //receberá os argumentos para a thread
@@ -57,8 +83,13 @@ int main() {
 
     srand(time(NULL));
     fillArray(randomlist, SIZEARRAY); //preenche a array com numeros aleatorios
-    //imprime(randomlist, SIZEARRAY);
-    //printf("%f\n", randomlist[0]);
+
+    // copia os itens da array preenchida para uma outra array para testar depois
+    for (int i = 0; i<SIZEARRAY; i++){
+        copyarray[i] = randomlist[i];
+    }
+
+    //printf("%f%f", copyarray[0], randomlist[0]);
     for(thread=0; thread<NTHREADS; thread++) {
         printf("--Aloca e preenche argumentos para thread %d\n", thread);
         arg = malloc(sizeof(t_Args));
@@ -67,9 +98,10 @@ int main() {
         }
         arg->idThread = thread; 
         arg->nThreads = NTHREADS;
+        arg->rlist = randomlist;
         
         printf("--Cria a thread %d\n", thread);
-        if (pthread_create(&tid_sistema[thread], NULL, MultiplyTenPercent, (void*) arg)) {
+        if (pthread_create(&tid_sistema[thread], NULL, MultiplyTenPercentThreads, (void*) arg)) {
             printf("--ERRO: pthread_create()\n"); exit(-1);
         }
     }
@@ -80,8 +112,10 @@ int main() {
             printf("--ERRO: pthread_join() \n"); exit(-1); 
       } 
     }
-    //imprime(randomlist, SIZEARRAY);
-    //printf("%f\n", randomlist[0]);
+
+    MultiplyTenPercent(copyarray); //multiplica a array copiada sequencialmente
+    isCorrect(copyarray, randomlist); //testa se está correto
+
     printf("--Thread principal terminou\n");
     pthread_exit(NULL);
 }
