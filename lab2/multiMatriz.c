@@ -73,7 +73,6 @@ int leMatrizBinario(char* arquivo, vetor* entrada) {
 int main(int argc, char*argv[]){
     vetor matriz1, matriz2, matrizsaida;
     int m1index, m2index, msaidaindex;
-    int dimsaida;
     double inicio, fim, delta;
 
 
@@ -106,7 +105,7 @@ int main(int argc, char*argv[]){
 
     GET_TIME(fim);
     delta = fim-inicio;
-    printf("Tempo de inicialização %lf", delta);
+    printf("Tempo de inicialização %lf\n", delta);
 
     //processamento
     GET_TIME(inicio);
@@ -122,18 +121,17 @@ int main(int argc, char*argv[]){
     }
 
 
-    puts("Saída");
-    for (int i = 0; i<matrizsaida.linhas; i++){
+    /*for (int i = 0; i<matrizsaida.linhas; i++){
         for (int j = 0; j<matrizsaida.colunas; j++){
             msaidaindex = i*matrizsaida.colunas+j;
             printf("%f ", matrizsaida.vetores[msaidaindex]);
         }
         puts("");
-    }
+    }*/
 
     GET_TIME(fim);
     delta = fim-inicio;
-    printf("Tempo de processamento %lf", delta);
+    printf("Tempo de processamento %lf\n", delta);
 
     //finalização
     GET_TIME(inicio);
@@ -143,7 +141,7 @@ int main(int argc, char*argv[]){
 
     GET_TIME(fim);
     delta = fim-inicio;
-    printf("Tempo de finalização %lf", delta);
+    printf("Tempo de finalização %lf\n", delta);
 
     return 0;
 }
