@@ -7,7 +7,7 @@
 #include<stdio.h>
 #include<stdlib.h>
 
-int leMatrizBinario(char *argv) {
+int main(int argc, char*argv[]) {
    float *matriz; //matriz que será carregada do arquivo
    int linhas, colunas; //dimensoes da matriz
    long long int tam; //qtde de elementos na matriz
@@ -15,9 +15,13 @@ int leMatrizBinario(char *argv) {
    size_t ret; //retorno da funcao de leitura no arquivo de entrada
    
    //recebe os argumentos de entrada
+   if(argc < 2) {
+      fprintf(stderr, "Digite: %s <arquivo entrada>\n", argv[0]);
+      return 1;
+   }
    
    //abre o arquivo para leitura binaria
-   descritorArquivo = fopen(argv, "rb");
+   descritorArquivo = fopen(argv[1], "rb");
    if(!descritorArquivo) {
       fprintf(stderr, "Erro de abertura do arquivo\n");
       return 2;

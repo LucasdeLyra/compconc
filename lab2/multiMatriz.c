@@ -8,8 +8,33 @@ typedef struct vetor{
     float *vetores;
 } vetor;
 
+int escreveMatrizBinario(vetor matrizsaida, char *saida){
+    long long int tam; //qtde de elementos na matriz
+    FILE * descritorArquivo; //descritor do arquivo de saida
+    size_t ret; //retorno da funcao de escrita no arquivo de saida
+    tam = matrizsaida.linhas * matrizsaida.colunas;
+    //escreve a matriz no arquivo
+    //abre o arquivo para escrita binaria
+    descritorArquivo = fopen(saida, "wb");
+    if(!descritorArquivo) {
+        fprintf(stderr, "Erro de abertura do arquivo\n");
+        return 3;
+    }
+    //escreve numero de linhas e de colunas
+    ret = fwrite(&matrizsaida.linhas, sizeof(int), 1, descritorArquivo);
+    ret = fwrite(&matrizsaida.colunas, sizeof(int), 1, descritorArquivo);
+    //escreve os elementos da matriz
+    ret = fwrite(matrizsaida.vetores, sizeof(float), tam, descritorArquivo);
+    if(ret < tam) {
+        fprintf(stderr, "Erro de escrita no  arquivo\n");
+        return 4;
+    }
+    //finaliza o uso das variaveis
+    fclose(descritorArquivo);
+    return 0;
+}
+
 int leMatrizBinario(char* arquivo, vetor* entrada) {
-    float *matriz; //matriz que será carregada do arquivo
     int linhas, colunas; //dimensoes da matriz
     long long int tam; //qtde de elementos na matriz
     FILE * descritorArquivo; //descritor do arquivo de entrada
@@ -35,27 +60,19 @@ int leMatrizBinario(char* arquivo, vetor* entrada) {
     }
     tam = linhas * colunas; //calcula a qtde de elementos da matriz
     //aloca memoria para a matriz
-    matriz = (float*) malloc(sizeof(float) * tam);
-    if(!matriz) {
-        fprintf(stderr, "Erro de alocao da memoria da matriz\n");
-        return 3;
-    }
-
-    //carrega a matriz de elementos do tipo float do arquivo
-    ret = fread(matriz, sizeof(float), tam, descritorArquivo);
-    if(ret < tam) {
-        fprintf(stderr, "Erro de leitura dos elementos da matriz\n");
-        return 4;
-    }
     entrada->linhas = linhas;
     entrada->colunas = colunas;
     entrada->vetores = (float*)malloc(entrada->linhas*entrada->colunas*sizeof(float));
     if (entrada->vetores == NULL){
         printf("--ERRO: malloc()\n"); exit(-1);
     }
-    for (int i = 0; i<linhas*colunas; i++){
-        entrada->vetores[i] = matriz[i];
+    //carrega a matriz de elementos do tipo float do arquivo
+    ret = fread(entrada->vetores, sizeof(float), tam, descritorArquivo);
+    if(ret < tam) {
+        fprintf(stderr, "Erro de leitura dos elementos da matriz\n");
+        return 4;
     }
+
     //imprime a matriz na saida padrao
     /*for(int i=0; i<linhas; i++) { 
         for(int j=0; j<colunas; j++)
@@ -65,7 +82,6 @@ int leMatrizBinario(char* arquivo, vetor* entrada) {
 
     //finaliza o uso das variaveis
     fclose(descritorArquivo);
-    free(matriz);
     return 0;
 }
 
@@ -119,7 +135,7 @@ int main(int argc, char*argv[]){
             }
         }
     }
-
+    escreveMatrizBinario(matrizsaida, argv[3]);
 
     /*for (int i = 0; i<matrizsaida.linhas; i++){
         for (int j = 0; j<matrizsaida.colunas; j++){
