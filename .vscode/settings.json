@@ -1,6 +1,8 @@
 {
     "files.associations": {
         "stdlib.h": "c",
-        "complex": "c"
+        "complex": "c",
+        "time.h": "c",
+        "thread": "c"
     }
 }
