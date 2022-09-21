@@ -142,7 +142,7 @@ int main(int argc, char*argv[]){
     }
 
     for (int i = 0; i < matriz1.linhas*matriz2.colunas; i++){
-        matrizsaida.vetores[i] = 0;
+        matrizsaida.vetores[i] = 0; //inicializa a matriz de saída com 0s
     }
     numthreads = atoi(argv[4]);
 
@@ -155,7 +155,7 @@ int main(int argc, char*argv[]){
     //processamento
     GET_TIME(inicio);
     for(thread=0; thread<numthreads; thread++) {
-        //printf("--Aloca e preenche argumentos para thread %d\n", thread);
+        //Aloca e preenche argumentos para cada thread 
         arg = malloc(sizeof(t_Args));
         if (arg == NULL) {
             printf("--ERRO: malloc()\n"); exit(-1);
@@ -166,15 +166,15 @@ int main(int argc, char*argv[]){
         arg->matriz2 = matriz2;
         arg->matrizsaida = matrizsaida;
         
-        //printf("--Cria a thread %d\n", thread);
+        //Cria as threads com as tarefas de multiplicação
         if (pthread_create(&tid_sistema[thread], NULL, MultiplyMatrixConcorrent, (void*) arg)) {
             printf("--ERRO: pthread_create()\n"); exit(-1);
         }
     }
 
-    for (thread=0; thread<numthreads; thread++) {
+    for (thread=0; thread<numthreads; thread++) { 
         if (pthread_join(tid_sistema[thread], NULL)) {
-            printf("--ERRO: pthread_join() \n"); exit(-1); 
+            printf("--ERRO: pthread_join() \n"); exit(-1); //espera cada thread acabar
       } 
     }
 
