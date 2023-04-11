@@ -2,7 +2,7 @@
 /* Prof.: Silvana Rossetto */
 /* Módulo 1 - Laboratório: 1 */
 /* Lucas de Lyra Monteiro - 121039714*/
-/* Codigo: Aumenta em 10% todo os itens de uma array usando threads em C e a funcao que espera as threads terminarem */
+/* Codigo: Multiplica por 2 todos os itens de uma array usando threads em C e a funcao que espera as threads terminarem */
 
 #include <stdio.h>
 #include <stdlib.h> 
