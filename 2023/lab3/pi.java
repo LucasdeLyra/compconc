@@ -3,13 +3,9 @@ import static java.lang.Math.*;
 /* Disciplina: Computacao Concorrente */
 /* Prof.: Silvana Rossetto */
 /* Laboratório: 3 */
-/* Codigo: Estendendo a classe Thread de Java */
+/* Codigo: Calculando pi com a aproximação de Leibniz */
 
 
-//--PASSO 1: cria uma classe que estende a classe Thread 
-
- 
-//--classe do metodo main
 class piApproximation {
     static final int NTHREADS = 8;
     private static int NITERATIONS = 100000000;
