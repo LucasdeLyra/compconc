@@ -20,7 +20,7 @@ class piApproximation {
      
         //--metodo executado pela thread
         public void run() {
-            for (int i = id * NITERATIONS; i < (id + 1) * NITERATIONS; i++) {
+            for (int i = id; i <NITERATIONS; i+=NTHREADS) {
                 double term = Math.pow(-1, i) / (2.0 * i + 1.0);
                 sum[id] += term;    
             }
