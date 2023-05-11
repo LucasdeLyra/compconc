@@ -1,10 +1,7 @@
 /* Disciplina: Computacao Concorrente */
 /* Prof.: Silvana Rossetto */
-/* Laboratório: 4 */
+/* Laboratório: 5 */
 /* Codigo: Uso de variáveis de condição e suas operações básicas para sincronização por condição */
-
-/***** Condicao logica da aplicacao: a thread B so pode imprimir "Bye" depois que duas threads A imprimirem  "Hello"  ****/
-
 #include <pthread.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,10 +18,6 @@ pthread_cond_t t_cond;
 
 
 void *oiMaria (void *t) {
-    int boba1, boba2;
-    
-    /* faz alguma coisa para gastar tempo... */
-    boba1=10000; boba2=-10000; while (boba2 < boba1) boba2++;
     printf("Oi, Maria!\n");
 
     pthread_mutex_lock(&x_mutex);
@@ -38,10 +31,6 @@ void *oiMaria (void *t) {
 }
 
 void *oiJose (void *t) {
-    int boba1, boba2;
-    
-    /* faz alguma coisa para gastar tempo... */
-    boba1=10000; boba2=-10000; while (boba2 < boba1) boba2++;
     printf("Oi, José!\n");
 
     pthread_mutex_lock(&x_mutex);
