@@ -1,6 +1,7 @@
 /* Disciplina: Computacao Concorrente */
 /* Prof.: Silvana Rossetto */
 /* Laboratório: 5 */
+/* Aluno: Lucas de Lyra Monteiro */
 /* Codigo: Uso de variáveis de condição e suas operações básicas para sincronização por condição */
 #include <pthread.h>
 #include <stdio.h>
