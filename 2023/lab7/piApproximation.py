@@ -1,5 +1,6 @@
 from math import pi, pow
 from threading import Thread
+from time import time, sleep
 
 class PiApproximationWorker(Thread):
     def __init__(self, id, iterations, threads, sum):
@@ -45,7 +46,22 @@ class PiApproximation:
 
 
 NITERATIONS = int(pow(10, 7))
-NTHREADS = 4
 
 a = PiApproximation()
-a.main(NTHREADS, NITERATIONS)
+
+tempo_inicial = time()
+a.main(1, NITERATIONS)
+tempo_final = time()
+print(f"O tempo total de execução com 1 Thread foi de {tempo_final-tempo_inicial}\n")
+sleep(3)
+
+tempo_inicial = time()
+a.main(2, NITERATIONS)
+tempo_final = time()
+print(f"O tempo total de execução com 2 Thread foi de {tempo_final-tempo_inicial}\n")
+sleep(3)
+
+tempo_inicial = time()
+a.main(4, NITERATIONS)
+tempo_final = time()
+print(f"O tempo total de execução com 4 Thread foi de {tempo_final-tempo_inicial}")
